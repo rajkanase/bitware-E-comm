@@ -29,7 +29,7 @@ export class UserServiceService {
   }
 
   checkLogin(em,pass){
-    let url=this.loginUrl+'/'+em;
+    let url=this.loginUrl+'/'+em+'/'+pass;
     console.log(url);
     
     return this.http.get(url)

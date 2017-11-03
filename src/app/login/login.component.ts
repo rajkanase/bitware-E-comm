@@ -28,27 +28,16 @@ export class LoginComponent implements OnInit {
    
     // console.log('sss');
     this.userSer.checkLogin(em,pass)
-    .subscribe(function(respUser){
-      this.user=respUser;
-     console.log(this.user);
-     console.log(this.user.email);
-     
-     
-     
+    .subscribe((respUser)=>{
+      if(respUser){
+      this.router.navigate(['/dash']);
+      }else{
+        console.log('wrong');
+      }
     });
 
 
-    if(this.user.email == em && this.user.password == pass){
-      console.log(this.user.password);
-      
-      console.log('Login Success');
-      // this.flag=true;
-      this.router.navigate(['/dash']);
-      
-       }else{
-         console.log('Email or Password is incorrect');
-         
-       }
+   
 
     
 

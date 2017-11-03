@@ -47,10 +47,11 @@ router.get('/users/:id',function(req,res){
 
 
 
-router.get('/login/:email',function(req,res){
+router.get('/login/:email/:password',function(req,res){
     var em=req.params.email;
+    var pass=req.params.password;
     console.log('Get request for single user');
-    User.findOne({email : em})
+    User.findOne({email : em,password:pass})
     .exec(function(err,user){
         if (err){
             console.log('Error retrieving user');

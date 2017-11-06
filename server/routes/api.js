@@ -3,6 +3,8 @@ const router=express.Router();
 
 const mongoose=require('mongoose');
 
+var nodemailer = require('nodemailer');
+
 const User=require('../models/user');
 
 const db="mongodb://raj:raj@ds243285.mlab.com:43285/e-comm";
@@ -17,6 +19,48 @@ mongoose.connect(db,(err)=>{
 router.get('/',function(req,res){
     res.send('Api Works');
 });
+
+
+
+//nodeMailer
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'newsapp007@gmail.com',
+        pass: 'Awari@gmail'
+    }
+});
+
+let mailOptions = {
+    from: 'newsapp007@gmail.com',
+    to: 'raj.17617@gmail.com',
+    subject: 'Node-Mailer',
+    text: 'Hi',
+};
+
+router.options('/sendmail', function (req, res) {
+  res.sendStatus(200);
+});
+
+
+router.post('/sendmail', function (req, res) {
+
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); // Change this to your Angular 2 port number
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+
+})
+//--nodeMailer ends here
+
 
 
 router.get('/users',(req,res)=>{
@@ -57,6 +101,20 @@ router.get('/login/:email/:password',function(req,res){
             console.log('Error retrieving user');
         }else{
             res.json(user);
+        }
+    });
+});
+
+router.delete('/delete/:email',function(req,res){
+    var em1=req.params.email;
+    // var pass=req.params.password;
+    console.log('Delete single user');
+    User.findOneAndRemove({email:em1})
+    .exec(function(err,deletedUser){
+        if (err){
+            console.log('Error deleting user');
+        }else{
+            res.json(deletedUser);
         }
     });
 });

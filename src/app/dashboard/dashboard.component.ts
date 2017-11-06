@@ -10,9 +10,13 @@ import { UserServiceService } from '../user-service.service';
 })
 export class DashboardComponent implements OnInit {
 
+  currentUser:User;
+
   constructor(
     private userSer:UserServiceService
-  ) { }
+  ) { 
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
 
    users:Array<User>;
    welcome;
@@ -44,6 +48,13 @@ export class DashboardComponent implements OnInit {
   onMngUsr(){
     this.usr=true;
     this.welcome=false;
+  }
+
+  onDelete(email){
+    this.userSer.delUser(email).subscribe(respDel=>{
+      console.log('Deleted');
+      
+    })
   }
 
 }

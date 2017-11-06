@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserServiceService } from '../user-service.service';
+import { Router } from '@angular/router';
+import { AlertService } from '../alert.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +15,9 @@ export class RegisterComponent implements OnInit {
 
 
   constructor(
-    private userSer:UserServiceService
+    private userSer:UserServiceService,
+    private router:Router,
+    private alertService: AlertService
   ) { }
 
   ngOnInit() {
@@ -32,10 +36,13 @@ export class RegisterComponent implements OnInit {
 
     this.userSer.saveUser(user)
     .subscribe(respNewUser =>{
-      console.log(respNewUser.json);
-      
-      this.users.push(respNewUser);
-    })
+      this.alertService.success('Registration successful', true);
+      this.router.navigate(['/login'])
+      // this.users.push(respNewUser);
+    },
+  error=>{
+    this.alertService.error(error);
+  });
 
 
   }

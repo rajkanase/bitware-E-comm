@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserServiceService } from '../user-service.service';
 import { User } from '../user';
+import { AlertService } from '../alert.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router:Router,
-    private userSer:UserServiceService
+    private userSer:UserServiceService,
+    private alertService: AlertService
   ) { }
 
   user:User;
@@ -29,11 +31,13 @@ export class LoginComponent implements OnInit {
     // console.log('sss');
     this.userSer.checkLogin(em,pass)
     .subscribe((respUser)=>{
-      if(respUser){
+      // console.log(respUser);
+      
       this.router.navigate(['/dash']);
-      }else{
-        console.log('wrong');
-      }
+    },
+    error=>{
+        this.alertService.error(error);
+      
     });
 
 

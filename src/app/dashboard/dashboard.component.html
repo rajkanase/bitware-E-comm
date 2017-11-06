@@ -64,7 +64,7 @@
             <td>{{user.email}}</td>
             <td>{{user.role}}</td>
             <td>
-              <input type="button" class="btn btn-primary" value="Delete">
+              <input type="button" class="btn btn-primary" value="Delete" (click)=onDelete(user.email)>
             </td>
           </tr>
         </tbody>
@@ -73,7 +73,7 @@
     </div> 
     
     <div *ngIf="welcome" class="jumbotron" style="margin-top:10px">
-            <h1>Welcome !</h1>
+            <h1>Welcome {{currentUser.first_name}}!</h1>
             </div>
 
   </div><!-- col md 8-->

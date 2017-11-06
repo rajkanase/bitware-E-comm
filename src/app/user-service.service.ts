@@ -11,9 +11,12 @@ export class UserServiceService {
     private http:Http
   ) { }
 
+  currentUser:User;
+
   private getUrl="/api/users";
   private postUrl="/api/saveuser";
   private loginUrl="api/login";
+  private delUrl = "/api/delete";
 
   getUsers(){
     return this.http.get(this.getUrl)
@@ -33,10 +36,44 @@ export class UserServiceService {
     console.log(url);
     
     return this.http.get(url)
-    .map((response:Response) => response.json());
+    .map((response:Response) => {
+      let user = response.json();
+      if (user && user.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+          console.log(this.currentUser);
+          console.log('hi');
+          
+      }
+
+      return user;
+    });
   
     
   }
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+}
+
+delUser(email){
+  let url=this.delUrl+'/'+email;
+  console.log(url);
+
+  return this.http.delete(url)
+  .map((response:Response)=>response.json());
+}
+
+private jwt() {
+  // create authorization header with jwt token
+  let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser && currentUser.token) {
+      let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+      return new RequestOptions({ headers: headers });
+  }
+}
   
 
 }
